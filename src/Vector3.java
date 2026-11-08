@@ -4,6 +4,4 @@ public class Vector3 extends Vector{
         this.values.set(1, y);
         this.values.set(2, z);
     }
-
-
 }
