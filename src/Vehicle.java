@@ -1,5 +1,5 @@
-public abstract class Vehicle {
-    //TODO: transform and position things
+public abstract class Vehicle extends GameObject{
+    private Transform transform;
     private boolean isCrashed; //So it can be towed
 
     public boolean onCollision() {
