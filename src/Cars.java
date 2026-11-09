@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-public class Cars {
+public class Cars extends GameObject{
     private static final HashMap<String, CarStats> carStatsMap = new HashMap<>();
 
     public static CarStats getCarStats(String carName) {

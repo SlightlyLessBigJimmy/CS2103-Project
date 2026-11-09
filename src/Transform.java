@@ -1,6 +1,6 @@
 public class Transform {
-    public Vector position;
-    public Vector size;
+    public Vector3 position;
+    public Vector3 size;
     public double orientation;
 
     public Transform(){
