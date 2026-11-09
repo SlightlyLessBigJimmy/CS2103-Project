@@ -3,7 +3,7 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.EventListener;
 
-public class RigidBody implements PhysicsObject{
+public class RigidBody implements GlobalUpdate{
     private EventListenerList collisionListeners = new EventListenerList();
     private GameObject gameObject;
     private Vector3 velocity;
@@ -17,7 +17,7 @@ public class RigidBody implements PhysicsObject{
         this.velocity = new Vector3();
     }
 
-    public void updatePhysics() {
+    public void update() {
         //TODO: Make velocity instead of direct transform
         newPosition();
     }
