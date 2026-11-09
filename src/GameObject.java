@@ -1,6 +1,5 @@
 public class GameObject {
     public boolean visible = true;
-    public boolean canCollide = false;
     public Transform transform;
 
     public GameObject(){
@@ -13,5 +12,17 @@ public class GameObject {
 
     public GameObject(Transform transform){
         this.transform = transform;
+    }
+
+    public boolean onCollision() {
+        //TODO: Raise an event for the front end. Pass collision data (i.e. where the collision happened on the model).
+
+        return true; //TODO: Return true if there actually was a collision. Return false otherwise. For ease of error handling
+    }
+
+    public boolean onCollision(GameObject other) {
+        //TODO: Raise an event for the front end. Pass collision data (i.e. where the collision happened on the model).
+
+        return true; //TODO: Return true if there actually was a collision. Return false otherwise. For ease of error handling
     }
 }
