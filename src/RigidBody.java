@@ -7,6 +7,9 @@ public class RigidBody implements GlobalUpdate{
     private EventListenerList collisionListeners = new EventListenerList();
     private GameObject gameObject;
     private Vector3 velocity;
+    private Vector3 centerOfMass;
+    private double mass;
+
 
     void addCollisionListener(CollisionListener listener) {collisionListeners.add(CollisionListener.class, listener);}
     void removeCollisionListener(CollisionListener listener) {collisionListeners.remove(CollisionListener.class, listener);}
@@ -15,6 +18,8 @@ public class RigidBody implements GlobalUpdate{
         //Initialize the rigidbody to its parent GameObject
         this.gameObject = gameObject;
         this.velocity = new Vector3();
+        this.centerOfMass = new Vector3();
+
     }
 
     public void update() {
