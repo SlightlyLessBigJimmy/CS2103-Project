@@ -3,7 +3,6 @@ import frontend.Environment;
 import frontend.GamePanel;
 import frontend.GameWindow;
 import frontend.RendererDef;
-
 import javax.swing.event.EventListenerList;
 
 private static boolean isRunning = true;

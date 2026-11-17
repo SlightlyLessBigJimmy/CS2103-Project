@@ -48,11 +48,11 @@ public class RigidBody implements GlobalUpdate{
     public void addForce(Vector3 forceVector){
         //ToDo: make add force work
     }
+
+    public void physicsRotate(double orientation){
+        //ToDo: applies the required angular velocity to bring the object to a given orientation.
+    }
 }
-
-
-
-
 
 class CollisionEvent extends EventObject{
     public CollisionEvent(RigidBody source){

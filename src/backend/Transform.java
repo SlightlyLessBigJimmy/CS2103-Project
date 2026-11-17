@@ -17,11 +17,17 @@ public class Transform {
         this.orientation = orientation;
     }
 
-    //finds the local vector facing "up"
     public Vector3 up(){
         double rad = Math.toRadians(orientation);
         double x = -Math.sin(rad);
         double y = Math.cos(rad);
-        return new Vector3(x,y,0);//0 on z axis because our transform only handles 2D orientation
+        return new Vector3(x,y,0);
+    }
+
+    public Vector3 right(){
+        double rad = Math.toRadians(orientation);
+        double x = Math.cos(rad);
+        double y = Math.sin(rad);
+        return new Vector3(x,y,0);
     }
 }

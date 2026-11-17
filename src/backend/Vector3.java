@@ -15,16 +15,25 @@ public class Vector3{
         new Vector3(0,0,0);
     }
 
+    //adds up all dimensions of the vector
     public double sum(){
         return this.x+this.y+this.z;
     }
 
-
+    //multiplies by another vector or a scalar
     public Vector3 multiply(Vector3 other){
         return new Vector3(this.x * other.x, this.y * other.y, this.z * other.z);
     }
     public Vector3 multiply(double scalar){
         return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
+    }
+
+    //adds another vector or scalar to this
+    public Vector3 add(Vector3 other){
+        return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
+    }
+    public Vector3 add(double scalar){
+        return new Vector3(this.x + scalar, this.y + scalar, this.z + scalar);
     }
 
     public double magnitude(){

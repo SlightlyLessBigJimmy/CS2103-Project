@@ -15,15 +15,14 @@ public class Car extends Vehicle {
 
     private RigidBody rigidbody = new RigidBody(this);
 
-    public void applyInputs(double acceleration, double steering){
+    public void updateInputs(double acceleration, double steering){
         this.accelerationInput = acceleration;
         this.steeringInput = steering;
     }
 
     public void fixedUpdate(double fixedDeltaTime){
-        System.out.println("car update");
         applyEngineForce(fixedDeltaTime);
-        //ToDo: apply steering
+        applySteering();
     }
 
     //ToDo figure out where to put Lerp
@@ -59,4 +58,27 @@ public class Car extends Vehicle {
         rigidbody.addForce(engineForce);
     }
 
+
+    void applySteering()
+    {
+        // get forward and right velocity of the car
+        Vector3 forwardVelocity = this.transform.up().multiply(rigidbody.velocity.dot(this.transform.up()));
+        Vector3 rightVelocity = this.transform.right().multiply(rigidbody.velocity.dot(this.transform.right()));
+
+        // remove the orthogonal velocity based on the drift factor
+        rigidbody.velocity = forwardVelocity.add(rightVelocity.multiply(driftFactor));
+
+        //limit turning with low speed
+        double minSpeedBeforeAllowTurningFactor = (rigidbody.velocity.magnitude() / 8);
+        minSpeedBeforeAllowTurningFactor = Math.clamp(minSpeedBeforeAllowTurningFactor, 0, 1);
+
+        // invert steering while reversing
+        double direction = rigidbody.velocity.dot(this.transform.up()) >= 0 ? 1 : -1;
+
+        // update the rotation angle based on input
+        rotationAngle -= steeringInput * turnFactor * minSpeedBeforeAllowTurningFactor * direction;
+
+        // apply steering by rotating the car object
+        rigidbody.physicsRotate(rotationAngle);
+    }
 }
