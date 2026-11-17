@@ -1,12 +1,21 @@
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-public class Sprite {
+
+public class Sprite {// This should 100% implement Renderable I just havent gotten there yet
     private Image sprite;
+    //might be good to hold a list of images as one sprite and just render them in order for shadows
 
     public Sprite(String imgFileName) throws IOException {
-        this.sprite = ImageIO.read(new File(imgFileName));
+        try{
+            this.sprite = ImageIO.read(new File(imgFileName));
+        }
+        catch (IOException e){
+            this.sprite = null;
+        }
+
     }
 
     public Image getSprite() {
@@ -21,5 +30,3 @@ public class Sprite {
         this.sprite = ImageIO.read(new File(imgFileName));
     }
 }
-
-
