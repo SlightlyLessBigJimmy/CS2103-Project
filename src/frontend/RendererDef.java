@@ -11,7 +11,7 @@ public class RendererDef {
     public void remove(Renderable r) { renderables.remove(r); }
 
     public void render(Graphics2D g, int width, int height, int x, int y) {
-        for (Renderable r : renderables) {
+        for (Renderable r : renderables) {//sort by zindex
             r.render(g, width, height, x, y);
         }
     }

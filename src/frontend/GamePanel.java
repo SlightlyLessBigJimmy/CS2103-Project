@@ -12,7 +12,6 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g){
-        super.paintComponent(g);
         RENDERERDef.render((Graphics2D) g, getWidth(), getHeight(),getX(), getY());
     }
 }
