@@ -1,3 +1,5 @@
+package backend;
+
 public class VehicleState {
     String Panic; //Erratic movements. Will no longer signal and is just trying to stay alive
     String Breakdown; //Parked in the breakdown lane. Get picked up by tow truck when this state is reached

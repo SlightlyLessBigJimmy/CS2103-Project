@@ -1,7 +1,7 @@
+package backend;
+
 import javax.swing.event.EventListenerList;
-import java.util.EventListener;
 import java.util.EventObject;
-import java.util.EventListener;
 
 public class RigidBody implements GlobalUpdate{
     private EventListenerList collisionListeners = new EventListenerList();
@@ -15,7 +15,7 @@ public class RigidBody implements GlobalUpdate{
     void removeCollisionListener(CollisionListener listener) {collisionListeners.remove(CollisionListener.class, listener);}
 
     public RigidBody(GameObject gameObject){
-        //Initialize the rigidbody to its parent GameObject
+        //Initialize the rigidbody to its parent backend.GameObject
         this.gameObject = gameObject;
         this.velocity = new Vector3();
         this.centerOfMass = new Vector3();

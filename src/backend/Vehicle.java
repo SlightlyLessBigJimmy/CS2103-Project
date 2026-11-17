@@ -1,3 +1,5 @@
+package backend;
+
 public abstract class Vehicle extends GameObject{
     //TODO: transform and position things
     private boolean isCrashed; //So it can be towed

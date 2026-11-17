@@ -1,3 +1,5 @@
+package backend;
+
 public class GameObject implements GlobalUpdate{
     public boolean visible = true;
     public Transform transform;

@@ -1,3 +1,5 @@
+package backend;
+
 public class Timing {
     private static float deltaTime; // change in time between rendered frames
     private static float fixedDeltaTime; // 1/framerate, if framerate is fixed

@@ -1,10 +1,11 @@
+package frontend;
+
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Sprite {// This should 100% implement Renderable I just havent gotten there yet
+public class Sprite implements Renderable {// This should 100% implement frontend.Renderable I just havent gotten there yet
     private Image sprite;
     //might be good to hold a list of images as one sprite and just render them in order for shadows
 

@@ -1,3 +1,5 @@
+package backend;
+
 import java.util.EventListener;
 
 public interface GlobalUpdate extends EventListener {
