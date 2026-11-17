@@ -20,7 +20,7 @@ public class Sprite implements Renderable {// This should 100% implement fronten
     }
 
     public Image getSprite() {
-        return sprite;
+        return sprite;//should try catch this
     }
 
     public void setSprite(Image sprite) {
@@ -29,5 +29,20 @@ public class Sprite implements Renderable {// This should 100% implement fronten
 
     public void setSpriteByName(String imgFileName) throws IOException {
         this.sprite = ImageIO.read(new File(imgFileName));
+    }
+
+    @Override
+    public int getZindex(){
+        return 0;// back
+    }
+
+    @Override
+    public void render(Graphics2D g, int width, int height,int x, int y){
+        if (sprite == null){
+            System.err.println("NotLoading");
+        }
+
+        g.drawImage(sprite,x,y,width,height,null);
+
     }
 }

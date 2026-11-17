@@ -1,8 +1,5 @@
-import backend.GlobalUpdate;
-import frontend.Environment;
-import frontend.GamePanel;
-import frontend.GameWindow;
-import frontend.RendererDef;
+import backend.*;
+import frontend.*;
 import javax.swing.event.EventListenerList;
 
 private static boolean isRunning = true;
@@ -18,7 +15,7 @@ public static void main(){
     renderer.add(env);                       // register so it gets drawn
 
     GamePanel panel = new GamePanel(renderer);
-    GameWindow window = new GameWindow(panel);   // window just adds the panel to the frame
+    GameWindow window = new GameWindow(panel);   // window/frame just adds the panel to the frame
 
     window.show();
 
