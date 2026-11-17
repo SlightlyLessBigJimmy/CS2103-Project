@@ -9,6 +9,8 @@ import javax.swing.event.EventListenerList;
 private static boolean isRunning = true;
 private static EventListenerList updateListeners = new EventListenerList();
 
+public static GameObject Camera;
+
 public static void main(){
 
     //Frontend start WILL refactor
@@ -30,6 +32,7 @@ public static void main(){
         GlobalUpdate[] listeners = updateListeners.getListeners(GlobalUpdate.class);
         for(GlobalUpdate listener : listeners){
             listener.update();
+            //ToDo: add fixed update
         }
     }
 }

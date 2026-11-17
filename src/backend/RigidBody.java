@@ -4,12 +4,14 @@ import javax.swing.event.EventListenerList;
 import java.util.EventObject;
 
 public class RigidBody implements GlobalUpdate{
-    private EventListenerList collisionListeners = new EventListenerList();
-    private GameObject gameObject;
-    private Vector3 velocity;
-    private Vector3 centerOfMass;
-    private double mass;
+    protected EventListenerList collisionListeners = new EventListenerList();
+    protected GameObject gameObject;
+    protected Vector3 velocity;
+    protected Vector3 centerOfMass;
+    protected Vector3 pivot;
 
+    protected double mass = 1;
+    protected double drag = 0;
 
     void addCollisionListener(CollisionListener listener) {collisionListeners.add(CollisionListener.class, listener);}
     void removeCollisionListener(CollisionListener listener) {collisionListeners.remove(CollisionListener.class, listener);}
@@ -22,12 +24,14 @@ public class RigidBody implements GlobalUpdate{
 
     }
 
-    public void update() {
+    public void update(double deltaTime) {
         //TODO: Make velocity instead of direct transform
-        newPosition();
+        newPosition(deltaTime);
     }
 
-    private void newPosition(){
+    private void newPosition(double deltaTime){
+        velocity = velocity.multiply(1-drag * deltaTime);//Apply drag
+
         gameObject.transform.position = new Vector3
                 (
                 gameObject.transform.position.x + velocity.x,
@@ -39,6 +43,10 @@ public class RigidBody implements GlobalUpdate{
     protected void onCollision(CollisionEvent e) {
         CollisionListener[] listeners = collisionListeners.getListeners(CollisionListener.class);
         for(CollisionListener listener : listeners) listener.collided(e);
+    }
+
+    public void addForce(Vector3 forceVector){
+        //ToDo: make add force work
     }
 }
 
