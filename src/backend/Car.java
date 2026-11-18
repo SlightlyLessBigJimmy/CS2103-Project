@@ -56,29 +56,39 @@ public class Car extends Vehicle {
         this.steeringInput = steering;
     }
 
-    public void update(){
-        applyEngineForce();
+    public void update(double deltaTime){
+        applyEngineForce(deltaTime);
         applySteering();
     }
 
-    void applyEngineForce(){
+
+    //ToDo figure out where to put Lerp
+    double lerp(double start, double end, double t){
+        return start + (end - start) * t;
+    }
+
+    void applyEngineForce(double deltaTime){
 
         double velocityVsUp = this.transform.up().dot(rigidBody.velocity);
 
+        //Limit speed forward
         if (velocityVsUp > maxSpeed && accelerationInput > 0){
             return;
         }
 
+        //limit speed reverse
         if (velocityVsUp < maxReverseSpeed  && accelerationInput < 0){
             return;
         }
 
+        //limit to max speed while accelerating
         if (Math.pow(rigidBody.velocity.magnitude(), 2) > Math.pow(maxSpeed, 2) && accelerationInput > 0){
             return;
         }
 
+        //apply drag to slow down while not accelerating (so you stop when you stop pressing gas)
         if (accelerationInput == 0){
-            rigidBody.drag = CustomMath.Lerp(rigidBody.drag, maxDragResistance, Timing.deltaTime() * maxDragResistance);
+            rigidBody.drag = lerp(rigidBody.drag, maxDragResistance, deltaTime * maxDragResistance);
         }
 
         Vector3 engineForce = this.transform.up().multiply(accelerationInput).multiply(accelerationFactor);
@@ -88,18 +98,24 @@ public class Car extends Vehicle {
 
     void applySteering()
     {
+        // get forward and right velocity of the car
         Vector3 forwardVelocity = this.transform.up().multiply(rigidBody.velocity.dot(this.transform.up()));
         Vector3 rightVelocity = this.transform.right().multiply(rigidBody.velocity.dot(this.transform.right()));
 
+        // remove the orthogonal velocity based on the drift factor
         rigidBody.velocity = forwardVelocity.add(rightVelocity.multiply(driftFactor));
 
+        //limit turning with low speed
         double minSpeedBeforeAllowTurningFactor = (rigidBody.velocity.magnitude() / 8);
         minSpeedBeforeAllowTurningFactor = Math.clamp(minSpeedBeforeAllowTurningFactor, 0, 1);
 
+        // invert steering while reversing
         double direction = rigidBody.velocity.dot(this.transform.up()) >= 0 ? 1 : -1;
 
+        // update the rotation angle based on input
         rotationAngle -= steeringInput * turnFactor * minSpeedBeforeAllowTurningFactor * direction;
 
+        // apply steering by rotating the car object
         rigidBody.physicsRotate(rotationAngle);
     }
 }
