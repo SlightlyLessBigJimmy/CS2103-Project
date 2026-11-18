@@ -1,7 +1,8 @@
 package backend;
+import Main.*;
 
 public class GameObject implements GlobalUpdate{
-    public boolean visible = true;
+    public boolean active = false;
     public Transform transform;
 
     public GameObject(){
@@ -14,5 +15,9 @@ public class GameObject implements GlobalUpdate{
 
     public GameObject(Transform transform){
         this.transform = transform;
+    }
+
+    protected void destroy(){
+        Main.removeFromUpdateListeners(this);
     }
 }
