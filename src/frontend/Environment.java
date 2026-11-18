@@ -5,22 +5,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Environment implements Renderable {
+public class Environment  {
     private Image backgroundImage;
 
-    @Override
-    public int getZindex(){
-        return -2;// back
-    }
-    @Override
-    public void render(Graphics2D g, int width, int height,int x, int y){
-        if (backgroundImage == null){
-            System.err.println("NotLoading");
-        }
 
-        g.drawImage(backgroundImage,x,y,width,height,null);
-
-    }
 
     public Environment(){
         String imgFileName = "Background.png";

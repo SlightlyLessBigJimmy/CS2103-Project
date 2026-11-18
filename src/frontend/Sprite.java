@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Sprite implements Renderable {// This should 100% implement frontend.Renderable I just havent gotten there yet
+public class Sprite
+{
     private Image sprite;
     private final int WIDTH;
     private final int HEIGHT;
@@ -24,12 +25,23 @@ public class Sprite implements Renderable {// This should 100% implement fronten
         HEIGHT = 50;
 
     }
+    public Sprite(String imgFileName,int width,int height) throws IOException {
+        try{
+            this.sprite = ImageIO.read(new File(imgFileName));
+        }
+        catch (IOException e){
+            this.sprite = null;
+        }
+        this.WIDTH = width;
+        this.HEIGHT = height;
 
-    public Image getSprite() {
-        return sprite;//should try catch this
     }
 
-    public void setSprite(Image sprite) {
+    public Image getImage() {
+        return sprite;
+    }
+
+    public void setImage(Image sprite) {
         this.sprite = sprite;
     }
 
@@ -37,18 +49,4 @@ public class Sprite implements Renderable {// This should 100% implement fronten
         this.sprite = ImageIO.read(new File(imgFileName));
     }
 
-    @Override
-    public int getZindex(){
-        return 0;// back
-    }
-
-    @Override
-    public void render(Graphics2D g, int width, int height,int x, int y){
-        if (sprite == null){
-            System.err.println("NotLoading");
-        }
-
-        g.drawImage(sprite,x,y,WIDTH,HEIGHT,null);
-
-    }
 }
