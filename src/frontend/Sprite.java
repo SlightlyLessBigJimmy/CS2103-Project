@@ -7,6 +7,10 @@ import javax.imageio.ImageIO;
 
 public class Sprite implements Renderable {// This should 100% implement frontend.Renderable I just havent gotten there yet
     private Image sprite;
+    private final int WIDTH;
+    private final int HEIGHT;
+
+
     //might be good to hold a list of images as one sprite and just render them in order for shadows
 
     public Sprite(String imgFileName) throws IOException {
@@ -16,6 +20,8 @@ public class Sprite implements Renderable {// This should 100% implement fronten
         catch (IOException e){
             this.sprite = null;
         }
+        WIDTH = 50;
+        HEIGHT = 50;
 
     }
 
@@ -42,7 +48,7 @@ public class Sprite implements Renderable {// This should 100% implement fronten
             System.err.println("NotLoading");
         }
 
-        g.drawImage(sprite,x,y,width,height,null);
+        g.drawImage(sprite,x,y,WIDTH,HEIGHT,null);
 
     }
 }
