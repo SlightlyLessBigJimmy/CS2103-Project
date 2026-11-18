@@ -16,8 +16,7 @@ public static void main(){
     //Frontend start WILL refactor
     RendererDef renderer = new RendererDef();//frontend.RendererDef is such a stupid name but Renderer was conflicting with an already made class that was messing with things
     Environment env = new Environment();//Dont mind the ugly background its very temporary
-
-    renderer.add(env);                       // register so it gets drawn
+    //renderer.add(env);                       // register so it gets drawn
 
     GamePanel panel = new GamePanel(renderer);
     GameWindow window = new GameWindow(panel);   // window/frame just adds the panel to the frame
@@ -26,11 +25,12 @@ public static void main(){
 
 
     //Bad very bad practice but setting up some cars
-    //not even doing it correctly either im setting up just a sprite, which Im thinking the backend will hold a variable to the sprite in each game object
+    //not even doing it correctly either im setting up just a sprite, which Im thinking the backend will hold a variable to the sprite
     try {
         System.out.println("Got image");
+
         Sprite car1 = new Sprite("images/car1.png");
-        renderer.add(car1);
+        //renderer.add(car1);
     }
     catch (IOException e){
         System.out.println("Error getting image");
