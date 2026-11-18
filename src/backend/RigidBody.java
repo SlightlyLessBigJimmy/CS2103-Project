@@ -6,7 +6,8 @@ import java.util.EventObject;
 public class RigidBody implements GlobalUpdate{
     protected EventListenerList collisionListeners = new EventListenerList();
     protected GameObject gameObject;
-    protected Vector3 velocity;
+    protected Vector3 linearVelocity;
+    protected Vector3 angularVelocity;
     protected Vector3 centerOfMass;
     protected Vector3 pivot;
 
@@ -19,7 +20,7 @@ public class RigidBody implements GlobalUpdate{
     public RigidBody(GameObject gameObject){
         //Initialize the rigidbody to its parent backend.GameObject
         this.gameObject = gameObject;
-        this.velocity = new Vector3();
+        this.linearVelocity = new Vector3();
         this.centerOfMass = new Vector3();
 
     }
@@ -30,13 +31,13 @@ public class RigidBody implements GlobalUpdate{
     }
 
     private void newPosition(double deltaTime){
-        velocity = velocity.multiply(1-drag * deltaTime);//Apply drag
+        linearVelocity = linearVelocity.multiply(1-drag * deltaTime);//Apply drag
 
         gameObject.transform.position = new Vector3
                 (
-                gameObject.transform.position.x + velocity.x,
-                gameObject.transform.position.y + velocity.y,
-                gameObject.transform.position.z + velocity.z
+                gameObject.transform.position.x + linearVelocity.x,
+                gameObject.transform.position.y + linearVelocity.y,
+                gameObject.transform.position.z + linearVelocity.z
                 );
     }
 

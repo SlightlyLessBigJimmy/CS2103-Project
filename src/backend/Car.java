@@ -69,7 +69,7 @@ public class Car extends Vehicle {
 
     void applyEngineForce(double deltaTime){
 
-        double velocityVsUp = this.transform.up().dot(rigidBody.velocity);
+        double velocityVsUp = this.transform.up().dot(rigidBody.linearVelocity);
 
         //Limit speed forward
         if (velocityVsUp > maxSpeed && accelerationInput > 0){
@@ -82,7 +82,7 @@ public class Car extends Vehicle {
         }
 
         //limit to max speed while accelerating
-        if (Math.pow(rigidBody.velocity.magnitude(), 2) > Math.pow(maxSpeed, 2) && accelerationInput > 0){
+        if (Math.pow(rigidBody.linearVelocity.magnitude(), 2) > Math.pow(maxSpeed, 2) && accelerationInput > 0){
             return;
         }
 
@@ -99,18 +99,18 @@ public class Car extends Vehicle {
     void applySteering()
     {
         // get forward and right velocity of the car
-        Vector3 forwardVelocity = this.transform.up().multiply(rigidBody.velocity.dot(this.transform.up()));
-        Vector3 rightVelocity = this.transform.right().multiply(rigidBody.velocity.dot(this.transform.right()));
+        Vector3 forwardVelocity = this.transform.up().multiply(rigidBody.linearVelocity.dot(this.transform.up()));
+        Vector3 rightVelocity = this.transform.right().multiply(rigidBody.linearVelocity.dot(this.transform.right()));
 
         // remove the orthogonal velocity based on the drift factor
-        rigidBody.velocity = forwardVelocity.add(rightVelocity.multiply(driftFactor));
+        rigidBody.linearVelocity = forwardVelocity.add(rightVelocity.multiply(driftFactor));
 
         //limit turning with low speed
-        double minSpeedBeforeAllowTurningFactor = (rigidBody.velocity.magnitude() / 8);
+        double minSpeedBeforeAllowTurningFactor = (rigidBody.linearVelocity.magnitude() / 8);
         minSpeedBeforeAllowTurningFactor = Math.clamp(minSpeedBeforeAllowTurningFactor, 0, 1);
 
         // invert steering while reversing
-        double direction = rigidBody.velocity.dot(this.transform.up()) >= 0 ? 1 : -1;
+        double direction = rigidBody.linearVelocity.dot(this.transform.up()) >= 0 ? 1 : -1;
 
         // update the rotation angle based on input
         rotationAngle -= steeringInput * turnFactor * minSpeedBeforeAllowTurningFactor * direction;
