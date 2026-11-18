@@ -1,16 +1,25 @@
 package backend;
 
-public class Timing {
+public class Timing{
+
+
+    private static long lastFrameTime = System.nanoTime();
+
     private static float deltaTime; // change in time between rendered frames
-    private static float fixedDeltaTime; // 1/framerate, if framerate is fixed
+
+
 
     public static float deltaTime() {
         return deltaTime;
     }
 
-    public static float fixedDeltaTime() {
-        return fixedDeltaTime;
+    public static void updateTime(){
+        long now = System.nanoTime();
+        deltaTime = now-lastFrameTime;
+        lastFrameTime = now;
     }
 
-    //TODO: Calculate deltaTime and fixedDeltaTime
+    public static void updateTime(int frameRate) {
+        deltaTime = (float) (1.0 / frameRate);
+    }
 }

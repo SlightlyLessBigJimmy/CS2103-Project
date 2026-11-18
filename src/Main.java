@@ -1,9 +1,13 @@
 import backend.*;
 import frontend.*;
+
 import javax.swing.event.EventListenerList;
 
 private static boolean isRunning = true;
 private static EventListenerList updateListeners = new EventListenerList();
+
+private static boolean fixedTime = false;
+private static int fixedFrameRate = 60;
 
 public static GameObject Camera;
 
@@ -23,12 +27,11 @@ public static void main(){
         panel.repaint();//simple repaintLoop
     }).start();
 
-
     while (isRunning){
+        if(!fixedTime) Timing.updateTime(); else Timing.updateTime(fixedFrameRate);
         GlobalUpdate[] listeners = updateListeners.getListeners(GlobalUpdate.class);
         for(GlobalUpdate listener : listeners){
             listener.update();
-            //ToDo: add fixed update
         }
     }
 }
