@@ -25,6 +25,7 @@ public class Car extends Vehicle {
         applySteering();
     }
 
+
     //ToDo figure out where to put Lerp
     double Lerp(double start, double end, double t){
         return start + (end - start) * t;
