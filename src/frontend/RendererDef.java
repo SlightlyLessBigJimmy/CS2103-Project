@@ -12,14 +12,14 @@ public class RendererDef {
 
     public void add(GameObject obj, String spriteImage) throws IOException {
         renderableObjects.add(obj);
-        sprites.register(obj.spriteId,spriteImage, (int)obj.transform.size.x, (int)obj.transform.size.y);
+        sprites.register(obj.getSpriteId(),spriteImage, (int)obj.transform.size.x, (int)obj.transform.size.y);
     }
     public void remove(GameObject r) { renderableObjects.remove(r); }
 
     public void render(Graphics2D g, int width, int height, int x, int y) {
         for (GameObject obj : renderableObjects) {// for each game object only render ones whose visible is true
             //Each object gets rendered the same way
-            if(obj.visible){
+            if(obj.active){
                 //project onto screen based off of camera
                 //display on screen
 

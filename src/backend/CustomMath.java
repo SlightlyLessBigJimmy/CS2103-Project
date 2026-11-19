@@ -12,6 +12,4 @@ public class CustomMath {//this name is really stupid but idk what to call this
         Main.addToUpdateListeners(object);
         return object;
     }
-
-
 }

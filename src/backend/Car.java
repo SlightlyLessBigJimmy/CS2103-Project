@@ -65,7 +65,7 @@ public class Car extends Vehicle {
     //ToDo figure out where to put Lerp
     double lerp(double start, double end, double t){
         return start + (end - start) * t;
-    }
+    } //Why did we define this here and in CustomMath.java? -Ryan
 
     void applyEngineForce(double deltaTime){
 

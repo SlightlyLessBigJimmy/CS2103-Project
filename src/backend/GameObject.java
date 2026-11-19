@@ -2,9 +2,9 @@ package backend;
 import Main.*;
 
 public class GameObject implements GlobalUpdate{
-    public boolean active = false;
+    public boolean active = true;
     public Transform transform;
-    public String spriteId;
+    private String spriteId;
     //message from brody
     //TODO can we get a public String spriteID; that on creation gets generated a unique ID that frontend can hashmap our own collection of sprites for rendering
 
@@ -26,4 +26,6 @@ public class GameObject implements GlobalUpdate{
     protected void destroy(){
         Main.removeFromUpdateListeners(this);
     }
+
+    public String getSpriteId() {return this.spriteId;}
 }
