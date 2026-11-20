@@ -5,14 +5,13 @@ public class Vector3{
     public double y;
     public double z;
 
+    public Vector3(){
+        new Vector3(0,0,0);
+    }
     public Vector3(double x, double y, double z){
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-
-    public Vector3(){
-        new Vector3(0,0,0);
     }
 
     //adds up all dimensions of the vector
@@ -42,5 +41,12 @@ public class Vector3{
 
     public double dot(Vector3 other){
         return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+
+    public Vector3 line(Vector3 other) {return this.multiply(-1).add(other);}
+
+    @Override
+    public String toString(){
+        return "(" + x + ", " + y + ", " + z + ")";
     }
 }

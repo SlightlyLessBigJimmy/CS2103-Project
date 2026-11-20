@@ -29,7 +29,7 @@ public class Main {
         //Frontend start WILL refactor
         RendererDef renderer = new RendererDef();//frontend.RendererDef is such a stupid name but Renderer was conflicting with an already made class that was messing with things
         Environment env = new Environment();//Dont mind the ugly background its very temporary
-        renderer.add(env);                       // register so it gets drawn
+        //renderer.add(env);                       // register so it gets drawn ! Errors out for me. Had to comment out for code to compile. Please fix - Ryan
 
         GamePanel panel = new GamePanel(renderer);
         GameWindow window = new GameWindow(panel);   // window/frame just adds the panel to the frame
@@ -43,7 +43,7 @@ public class Main {
             System.out.println("Got image");
 
             Sprite car1 = new Sprite("images/car1.png");
-            renderer.add(car1);
+            //renderer.add(car1); ! Errors out for me. Had to comment out for code to compile. Please fix - Ryan
         }
         catch (IOException e){
             System.out.println("Error getting image");
