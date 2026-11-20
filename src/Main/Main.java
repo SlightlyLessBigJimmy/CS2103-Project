@@ -35,7 +35,7 @@ public class Main {
         GameWindow window = new GameWindow(panel);   // window/frame just adds the panel to the frame
 
 
-
+        CustomMath.instantiate(new GameObject());
 
         //Bad very bad practice but setting up some cars
         //not even doing it correctly either im setting up just a sprite, which Im thinking the backend will hold a variable to the sprite
