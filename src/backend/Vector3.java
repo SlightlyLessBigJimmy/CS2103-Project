@@ -43,7 +43,22 @@ public class Vector3{
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
-    public double distance(Vector3 other) {return new Vector3(this.x-other.x, this.y-other.y, this.z-other.z).magnitude();}
+    public double distance(Vector3 other) {return line(other).magnitude();}
+
+    public Vector3 line(Vector3 other) {return new Vector3(other.x-this.x, other.y-this.y, other.z-this.z);}
+
+    public Vector3 normalized() {
+        double magnitude = magnitude();
+        return new Vector3(this.x / magnitude, this.y / magnitude, this.z / magnitude);
+    }
+
+    public Vector3 rotate2D(double orientation) {
+        return new Vector3(
+                this.x * Math.cos(orientation) - this.y * Math.sin(orientation),
+                this.x * Math.sin(orientation) - this.y * Math.cos(orientation),
+                this.z
+                );
+    }
 
     @Override
     public String toString(){
