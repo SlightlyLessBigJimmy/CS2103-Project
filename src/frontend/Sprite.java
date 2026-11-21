@@ -24,8 +24,8 @@ public class Sprite
         }
     }
 
-    public Vector3 getTransformPos(){
-        return  parentObj.transform.
+    public Transform getTransformPos(){
+        return new Transform(parentObj.transform);
     }
 
     public Image getImage() {
