@@ -17,6 +17,12 @@ public class Transform {
         this.orientation = orientation;
     }
 
+    public Transform(Transform other){
+        this.position = other.position;
+        this.size = other.position;
+        orientation = other.orientation;
+    }
+
     public Vector3 up(){
         double rad = Math.toRadians(orientation);
         double x = -Math.sin(rad);
