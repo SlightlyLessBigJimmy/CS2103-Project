@@ -1,34 +1,38 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Hitbox {
-    private ArrayList<Vector3> vertices;
-    public HashMap<Vector3, Vector3> edges;
+    private ArrayList<Vector3> vertices; //Positions of corners on hitboxes.
+    private double distanceFurthestVertex;
+    private Vector3 origin; //the pivot, for most cases
 
-    public Hitbox() {
-        vertices = new ArrayList<>();
-        edges = new HashMap<>();
+    public Hitbox(ArrayList<Vector3> vertices, Vector3 origin) {
+        if(vertices.size() < 3) throw new IllegalArgumentException("Need at least 3 vertices in a hitbox.");
+        this.vertices = vertices;
+        this.origin = origin;
+        this.distanceFurthestVertex = vertices.stream().max(
+                (Comparator.comparing( (Vector3 a) -> a.distance(origin)))
+        ).orElseThrow( () -> new IllegalStateException("Somehow there wasn't a furthest vertex!")).distance(origin);
     }
 
-    public void populateEdges(){
-        edges = new HashMap<>();
-        for(int i = 0; i < vertices.size()-1; i++) {
-            edges.put(vertices.get(i),(vertices.get(i).line(vertices.get(i+1))));
+    private static boolean intersects(Hitbox a, Hitbox b) {
+        if(!filterFar(a, b)) return false;
 
-        }
-        edges.put(vertices.getLast(),(vertices.getLast().line(vertices.getFirst())));
+        Vector3 closestVertex = b.vertices.stream().min(
+                Comparator.comparing( (Vector3 vert) -> vert.distance(a.origin))
+        ).orElseThrow( () -> new IllegalStateException("Hitbox b had no vertices somehow!"));
+
+        //TODO: Figure out if closestVertex is in the hitbox of a.
+
+        return false;
     }
 
-    public static void main() {
-        Hitbox box = new Hitbox();
-        box.vertices.add(new Vector3(0,0,0));
-        box.vertices.add(new Vector3(2, 4, 3));
-        box.vertices.add(new Vector3(1, 3, 2));
-
-        box.populateEdges();
-
-        box.vertices.forEach(vec -> {System.out.println(box.edges.get(vec));});
+    private static boolean filterFar(Hitbox a, Hitbox b) {
+        //A point on an edge can never be farther from the origin than the farthest vertex.
+        //Return false immediately if the farthest vertices on a & b are not greater than or equal to the distance between their origins.
+        return a.distanceFurthestVertex + b.distanceFurthestVertex < a.origin.distance(b.origin);
     }
 }

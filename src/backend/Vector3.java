@@ -43,7 +43,7 @@ public class Vector3{
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
-    public Vector3 line(Vector3 other) {return this.multiply(-1).add(other);}
+    public double distance(Vector3 other) {return new Vector3(this.x-other.x, this.y-other.y, this.z-other.z).magnitude();}
 
     @Override
     public String toString(){
