@@ -18,7 +18,7 @@ public class Hitbox {
     }
 
     private static boolean intersects2D(Hitbox a, Hitbox b) {
-        if(!filterFar(a, b)) return false;
+        if(filterFar(a, b)) return false;
 
         Vector3 closestVertexPosition = verticesWorldSpace(b).stream().min(
                 Comparator.comparing( (Vector3 vert) -> vert.distance(a.parentObject.transform.position))
@@ -35,8 +35,14 @@ public class Hitbox {
             double x = (closestVertexPosition.x - vertices.get(i).x) / (edges.get(i).x - ray.x);
             double y = (closestVertexPosition.y - vertices.get(i).y) / (edges.get(i).y - ray.y);
 
-            if(Math.abs(x-y) < tolerance && 0 < x && x < 1) intersections++;
+            System.out.println("Run: " + i);
+            System.out.println(x);
+            System.out.println(y);
+
+            if(Math.abs(x-y) < tolerance && -1 * tolerance < x && x < 1 + tolerance) intersections++;
         }
+
+        System.out.println(intersections);
 
         return intersections % 2 == 1;
     }
@@ -67,6 +73,20 @@ public class Hitbox {
     }
 
     static void main() {
+        ArrayList<Vector3> shape1 = new ArrayList<>();
+        ArrayList<Vector3> shape2 = new ArrayList<>();
 
+        shape1.add(new Vector3(0,0,0));
+        shape1.add(new Vector3(1,0,0));
+        shape1.add(new Vector3(0,1,0));
+
+        shape2.add(new Vector3(0,0,0));
+        shape2.add(new Vector3(1,1,0));
+        shape2.add(new Vector3(-1,0,0));
+
+        Hitbox one = new Hitbox(shape1, new GameObject());
+        Hitbox two = new Hitbox(shape2, new GameObject());
+
+        System.out.println(intersects2D(one, two));
     }
 }
