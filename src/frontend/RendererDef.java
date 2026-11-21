@@ -30,6 +30,6 @@ public class RendererDef {
 }
 
 
-//public double[] project(double worldX, double worldY){
+//public double[] project(GameObject Camera, ){
 //    double screenCenterX =
 //}
