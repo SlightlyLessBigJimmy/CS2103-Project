@@ -15,7 +15,7 @@ public class Main {
 
     public static GameObject Camera;
 
-    //problably wanna change this later for proper encapsulation
+    //probably wanna change this later for proper encapsulation
     public static void addToUpdateListeners(GlobalUpdate listener){
         updateListeners.add(GlobalUpdate.class, listener);
     }
@@ -32,7 +32,7 @@ public class Main {
 
 
         //Todo put renderer.renderNextFrame(...) inside the main game loop after physics
-        //Todo put renderer.setVisible(True); before game loop please :)
+        //Game loop
         while (isRunning){
             if(!fixedTime) Timing.updateTime(); else Timing.updateTime(fixedFrameRate);
             GlobalUpdate[] listeners = updateListeners.getListeners(GlobalUpdate.class);
