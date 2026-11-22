@@ -24,32 +24,57 @@ public class Hitbox {
                 Comparator.comparing( (Vector3 vert) -> vert.distance(a.parentObject.transform.position))
         ).orElseThrow( () -> new IllegalStateException("Hitbox b had no vertices somehow!"));
 
-        System.out.println(closestVertexPosition + " Position closest");
-
-        Vector3 ray = new Vector3(Math.random() + 1, Math.random() + 1, 0).normalized().multiply(a.distanceFurthestVertex);
-
-        System.out.println(ray + " Ray");
+        Vector3 ray = new Vector3(Math.random() + 1, Math.random() + 1, 0).normalized().multiply(Integer.MAX_VALUE);
 
         ArrayList<Vector3> vertices = verticesWorldSpace(a);
-        ArrayList<Vector3> edges = Hitbox.edges(a);
+        ArrayList<Vector3> edges = edges(a);
 
-        double tolerance = 0.01;
         int intersections = 0;
 
         for(int i = 0; i < edges.size(); i++) {
-            if(linesIntersect(closestVertexPosition, ray, vertices.get(i), edges.get(i))) intersections++;
+            if(rayIntersect(closestVertexPosition, ray, vertices.get(i), edges.get(i))) intersections++;
         }
 
         return intersections % 2 == 1;
     }
 
+    private static boolean intersects2DAggressive(Hitbox a, Hitbox b) {
+        if(filterFar(a, b)) return false;
+
+        ArrayList<Vector3> aVertices = verticesWorldSpace(a);
+        ArrayList<Vector3> aEdges = edges(a);
+        ArrayList<Vector3> bVertices = verticesWorldSpace(b);
+        ArrayList<Vector3> bEdges = verticesWorldSpace(b);
+
+        for(int i = 0; i < aEdges.size(); i++) {
+            Vector3 vertexA = aVertices.get(i);
+            Vector3 edgeA = aEdges.get(i);
+            for(int j = 0; j < bEdges.size(); j++) {
+                if(linesIntersect(vertexA, edgeA, bVertices.get(j), bEdges.get(j))) return true;
+            }
+        }
+
+        return intersects2D(a, b);
+    }
+
+    private static boolean rayIntersect(Vector3 point1, Vector3 slopes1, Vector3 point2, Vector3 slopes2) {
+
+        //Time the x is equal
+        double t = (slopes2.x * (point2.y - point1.y) - slopes2.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x * slopes2.y);
+        //Time the y is equal
+        double s = (slopes1.x * (point2.y - point1.y) - slopes1.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x * slopes2.y);
+
+        return s < 1 && t > 0 && s > 0;
+    }
+
     private static boolean linesIntersect(Vector3 point1, Vector3 slopes1, Vector3 point2, Vector3 slopes2) {
 
-        double t = (slopes2.x * (point2.y - point1.y) - slopes2.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x - slopes2.y);
-        double s = (slopes1.x * (point2.y - point1.y) - slopes1.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x - slopes2.y);
+        //Time the x is equal
+        double t = (slopes2.x * (point2.y - point1.y) - slopes2.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x * slopes2.y);
+        //Time the y is equal
+        double s = (slopes1.x * (point2.y - point1.y) - slopes1.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x * slopes2.y);
 
-        return t < 1 && s < 1 && t > 0 && s > 0;
-
+        return t<1 && s < 1 && t > 0 && s > 0;
     }
 
     private static boolean filterFar(Hitbox a, Hitbox b) {
@@ -59,10 +84,12 @@ public class Hitbox {
     }
 
     private static ArrayList<Vector3> verticesWorldSpace(Hitbox hitbox) {
-        ArrayList<Vector3> newVertices = (ArrayList<Vector3>) hitbox.vertices.clone();
-        for(Vector3 vert : newVertices) {
-            vert.rotate2D(hitbox.parentObject.transform.orientation);
-            vert.add(hitbox.parentObject.transform.position);
+        ArrayList<Vector3> vertices = (ArrayList<Vector3>) hitbox.vertices.clone();
+        ArrayList<Vector3> newVertices = new ArrayList<>();
+        for(Vector3 vert : vertices) {
+            vert = vert.rotate2D(hitbox.parentObject.transform.orientation);
+            vert = vert.add(hitbox.parentObject.transform.position);
+            newVertices.add(vert);
         }
         return newVertices;
     }
@@ -114,9 +141,9 @@ public class Hitbox {
         shape1.add(new Vector3(0,1,0));
 
         Hitbox h1 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 0));
-        Hitbox h2 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 45));
+        Hitbox h2 = new Hitbox(shape1, new GameObject(new Vector3(0.5,-0.5,0), new Vector3(1,1,1), 45));
 
-        return intersects2D(h1,h2);
+        return intersects2DAggressive(h1,h2);
     }
 
     static boolean test4(){//should return true
@@ -139,6 +166,5 @@ public class Hitbox {
         System.out.println(test2());//completely not touching
         System.out.println(test3());//on top of each other, one rotated 45 degrees
         System.out.println(test4());//exactly on top of each other
-
     }
 }
