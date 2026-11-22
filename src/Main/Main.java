@@ -5,6 +5,7 @@ import frontend.*;
 
 import javax.swing.event.EventListenerList;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
     private static boolean isRunning = true;
@@ -13,7 +14,7 @@ public class Main {
     private static boolean fixedTime = false;
     private static int fixedFrameRate = 60;
 
-    public static GameObject Camera;
+    public static Transform camera;
 
     //problably wanna change this later for proper encapsulation
     public static void addToUpdateListeners(GlobalUpdate listener){
@@ -29,16 +30,21 @@ public class Main {
         Renderer renderer = new Renderer(900,600);
         renderer.setVisible(true);
         CustomMath.instantiate(new GameObject());
+        renderer.setVisible(true);
 
-
-        //Todo put renderer.renderNextFrame(...) inside the main game loop after physics
-        //Todo put renderer.setVisible(True); before game loop please :)
         while (isRunning){
             if(!fixedTime) Timing.updateTime(); else Timing.updateTime(fixedFrameRate);
             GlobalUpdate[] listeners = updateListeners.getListeners(GlobalUpdate.class);
+
+            ArrayList<Sprite> sprites = new ArrayList<>();
+
             for(GlobalUpdate listener : listeners){
                 listener.update();
+                if (listener instanceof Sprite){
+                    sprites.add((Sprite) listener);
+                }
             }
+            renderer.renderNextFrame(sprites, camera);
         }
     }
 }
