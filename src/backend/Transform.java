@@ -20,7 +20,7 @@ public class Transform {
     public Transform(Transform other){
         this.position = other.position;
         this.size = other.position;
-        orientation = other.orientation;
+        this.orientation = other.orientation;
     }
 
     public Vector3 up(){

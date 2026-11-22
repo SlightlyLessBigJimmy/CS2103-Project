@@ -24,27 +24,32 @@ public class Hitbox {
                 Comparator.comparing( (Vector3 vert) -> vert.distance(a.parentObject.transform.position))
         ).orElseThrow( () -> new IllegalStateException("Hitbox b had no vertices somehow!"));
 
-        Vector3 ray = new Vector3(Math.random(), Math.random(), 0).multiply(a.distanceFurthestVertex * 2);
+        System.out.println(closestVertexPosition + " Position closest");
+
+        Vector3 ray = new Vector3(Math.random() + 1, Math.random() + 1, 0).normalized().multiply(a.distanceFurthestVertex);
+
+        System.out.println(ray + " Ray");
 
         ArrayList<Vector3> vertices = verticesWorldSpace(a);
         ArrayList<Vector3> edges = Hitbox.edges(a);
 
+        double tolerance = 0.01;
         int intersections = 0;
-        for(int i = 0; i < vertices.size(); i++) {
-            double tolerance = 0.01;
-            double x = (closestVertexPosition.x - vertices.get(i).x) / (edges.get(i).x - ray.x);
-            double y = (closestVertexPosition.y - vertices.get(i).y) / (edges.get(i).y - ray.y);
 
-            System.out.println("Run: " + i);
-            System.out.println(x);
-            System.out.println(y);
-
-            if(Math.abs(x-y) < tolerance && -1 * tolerance < x && x < 1 + tolerance) intersections++;
+        for(int i = 0; i < edges.size(); i++) {
+            if(linesIntersect(closestVertexPosition, ray, vertices.get(i), edges.get(i))) intersections++;
         }
 
-        System.out.println(intersections);
-
         return intersections % 2 == 1;
+    }
+
+    private static boolean linesIntersect(Vector3 point1, Vector3 slopes1, Vector3 point2, Vector3 slopes2) {
+
+        double t = (slopes2.x * (point2.y - point1.y) - slopes2.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x - slopes2.y);
+        double s = (slopes1.x * (point2.y - point1.y) - slopes1.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x - slopes2.y);
+
+        return t < 1 && s < 1 && t > 0 && s > 0;
+
     }
 
     private static boolean filterFar(Hitbox a, Hitbox b) {
@@ -72,21 +77,68 @@ public class Hitbox {
         return edges;
     }
 
-    static void main() {
+    static boolean test1(){//should return true
         ArrayList<Vector3> shape1 = new ArrayList<>();
-        ArrayList<Vector3> shape2 = new ArrayList<>();
 
         shape1.add(new Vector3(0,0,0));
         shape1.add(new Vector3(1,0,0));
+        shape1.add(new Vector3(1,1,0));
         shape1.add(new Vector3(0,1,0));
 
-        shape2.add(new Vector3(0,0,0));
-        shape2.add(new Vector3(1,1,0));
-        shape2.add(new Vector3(-1,0,0));
+        Hitbox h1 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 0));
+        Hitbox h2 = new Hitbox(shape1, new GameObject(new Vector3(0.5,0.5,0), new Vector3(1,1,1), 0));
 
-        Hitbox one = new Hitbox(shape1, new GameObject());
-        Hitbox two = new Hitbox(shape2, new GameObject());
+        return intersects2D(h1,h2);
+    }
 
-        System.out.println(intersects2D(one, two));
+    static boolean test2(){//should return false
+        ArrayList<Vector3> shape3 = new ArrayList<>();
+
+        shape3.add(new Vector3(0,0,0));
+        shape3.add(new Vector3(1,0,0));
+        shape3.add(new Vector3(1,1,0));
+        shape3.add(new Vector3(0,1,0));
+
+        Hitbox h1 = new Hitbox(shape3, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 0));
+        Hitbox h2 = new Hitbox(shape3, new GameObject(new Vector3(5,5,0), new Vector3(1,1,1), 0));
+
+        return intersects2D(h1,h2);
+    }
+
+    static boolean test3(){//should return true
+        ArrayList<Vector3> shape1 = new ArrayList<>();
+
+        shape1.add(new Vector3(0,0,0));
+        shape1.add(new Vector3(1,0,0));
+        shape1.add(new Vector3(1,1,0));
+        shape1.add(new Vector3(0,1,0));
+
+        Hitbox h1 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 0));
+        Hitbox h2 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 45));
+
+        return intersects2D(h1,h2);
+    }
+
+    static boolean test4(){//should return true
+        ArrayList<Vector3> shape1 = new ArrayList<>();
+
+        shape1.add(new Vector3(0,0,0));
+        shape1.add(new Vector3(1,0,0));
+        shape1.add(new Vector3(1,1,0));
+        shape1.add(new Vector3(0,1,0));
+
+        Hitbox h1 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 0));
+        Hitbox h2 = new Hitbox(shape1, new GameObject(new Vector3(0,0,0), new Vector3(1,1,1), 0));
+
+        return intersects2D(h1,h2);
+    }
+
+
+    static void main() {
+        System.out.println(test1());//corners overlap
+        System.out.println(test2());//completely not touching
+        System.out.println(test3());//on top of each other, one rotated 45 degrees
+        System.out.println(test4());//exactly on top of each other
+
     }
 }
