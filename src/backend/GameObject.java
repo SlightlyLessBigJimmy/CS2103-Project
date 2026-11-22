@@ -1,9 +1,13 @@
 package backend;
 import Main.*;
+import frontend.Sprite;
+
+import java.awt.*;
 
 public class GameObject implements GlobalUpdate{
     public boolean active = true;
     public Transform transform;
+    public Sprite sprite;
     private String spriteId;
     //message from brody
     //TODO can we get a public String spriteID; that on creation gets generated a unique ID that frontend can hashmap our own collection of sprites for rendering
