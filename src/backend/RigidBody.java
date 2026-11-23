@@ -4,8 +4,7 @@ import javax.swing.event.EventListenerList;
 import java.util.EventObject;
 
 public class RigidBody implements GlobalUpdate{
-    protected EventListenerList collisionListeners = new EventListenerList();
-    protected GameObject gameObject;
+    protected final GameObject gameObject;
     protected Vector3 linearVelocity;
     protected Vector3 angularVelocity;
     protected Vector3 centerOfMass;
@@ -13,9 +12,6 @@ public class RigidBody implements GlobalUpdate{
 
     protected double mass = 1;
     protected double drag = 0;
-
-    void addCollisionListener(CollisionListener listener) {collisionListeners.add(CollisionListener.class, listener);}
-    void removeCollisionListener(CollisionListener listener) {collisionListeners.remove(CollisionListener.class, listener);}
 
     public RigidBody(GameObject gameObject){
         //Initialize the rigidbody to its parent backend.GameObject
@@ -41,22 +37,11 @@ public class RigidBody implements GlobalUpdate{
                 );
     }
 
-    protected void onCollision(CollisionEvent e) {
-        CollisionListener[] listeners = collisionListeners.getListeners(CollisionListener.class);
-        for(CollisionListener listener : listeners) listener.collided(e);
-    }
-
     public void addForce(Vector3 forceVector){
         //ToDo: make add force work
     }
 
     public void physicsRotate(double orientation){
         //ToDo: applies the required angular velocity to bring the object to a given orientation.
-    }
-}
-
-class CollisionEvent extends EventObject{
-    public CollisionEvent(RigidBody source){
-        super(source);
     }
 }
