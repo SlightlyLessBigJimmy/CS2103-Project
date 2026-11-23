@@ -53,9 +53,10 @@ public class Vector3{
     }
 
     public Vector3 rotate2D(double orientation) {
+        double radians = Math.toRadians(orientation);
         return new Vector3(
-                this.x * Math.cos(orientation) - this.y * Math.sin(orientation),
-                this.x * Math.sin(orientation) - this.y * Math.cos(orientation),
+                this.x * Math.cos(radians) - this.y * Math.sin(radians),
+                this.x * Math.sin(radians) + this.y * Math.cos(radians),
                 this.z
                 );
     }
