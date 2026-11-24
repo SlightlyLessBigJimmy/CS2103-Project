@@ -1,9 +1,9 @@
 package frontend;
-
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
+import backend.Player;
 import backend.Transform;
 
 import javax.swing.*;

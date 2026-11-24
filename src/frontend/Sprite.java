@@ -1,6 +1,7 @@
 package frontend;
 
 import backend.GameObject;
+import backend.GlobalUpdate;
 import backend.Transform;
 import backend.Vector3;
 
@@ -9,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Sprite
+public class Sprite implements GlobalUpdate
 {
     private final GameObject parentObj; // points to the sprites GameObject
     private Image sprite; //might be good to hold a list of images as one sprite and just render them in order for shadows

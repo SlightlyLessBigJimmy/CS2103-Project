@@ -4,12 +4,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.http.WebSocket;
 
-public class Player extends Car implements KeyListener {
+public class Player extends Car implements KeyListener, GlobalUpdate {
     boolean movingUp = false;
     boolean movingDown = false;
     boolean turningRight = false;
     boolean turningLeft = false;
     //TODO: get the key pressed connected to the panel listeners
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -62,8 +63,10 @@ public class Player extends Car implements KeyListener {
         double currentSteer = getSteeringInput();
         double steering = currentSteer;
         double acceleration = currentAccel;
-        if(movingUp)
+        if(movingUp){
+            System.out.println("skhjbgdgfghsaghfshjadfs");
             acceleration = lerp(currentAccel, 1, 1.0);
+        }
         else if(movingDown)
             acceleration = lerp(currentAccel, -1, 1.0);
         if(turningLeft)
@@ -73,3 +76,4 @@ public class Player extends Car implements KeyListener {
         updateInputs(acceleration, steering);
     }
 }
+

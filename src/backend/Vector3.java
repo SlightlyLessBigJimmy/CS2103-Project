@@ -27,12 +27,34 @@ public class Vector3{
         return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
+    //divides by another vector (component-wise) or a scalar
+    public Vector3 divide(Vector3 other){
+        if (other.x == 0 || other.y == 0 || other.z == 0){
+            throw new IllegalStateException("no noo divide by zero");
+        }
+        return new Vector3(this.x / other.x, this.y / other.y, this.z / other.z);
+    }
+    public Vector3 divide(double scalar){
+        if (scalar == 0){
+            throw new IllegalStateException("no noo divide by zero");
+        }
+        return new Vector3(this.x / scalar, this.y / scalar, this.z / scalar);
+    }
+
     //adds another vector or scalar to this
     public Vector3 add(Vector3 other){
         return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
     }
     public Vector3 add(double scalar){
         return new Vector3(this.x + scalar, this.y + scalar, this.z + scalar);
+    }
+
+    //subtracts another vector or scalar from this
+    public Vector3 subtract(Vector3 other){
+        return new Vector3(this.x - other.x, this.y - other.y, this.z - other.z);
+    }
+    public Vector3 subtract(double scalar){
+        return new Vector3(this.x - scalar, this.y - scalar, this.z - scalar);
     }
 
     public double magnitude(){

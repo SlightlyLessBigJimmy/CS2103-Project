@@ -4,12 +4,12 @@ public class Car extends Vehicle {
     //this class is mostly for the player movement, but could be used for NPC cars as well if that's how we want to do things
 
     //region car specifications
-    public double accelerationFactor;
-    public double driftFactor;
-    public double maxDragResistance;
-    public double maxReverseSpeed;
-    public double maxSpeed;
-    public double turnFactor;
+    private final double accelerationFactor;
+    private final double driftFactor;
+    private final double maxDragResistance;
+    private final double maxReverseSpeed;
+    private final double maxSpeed;
+    private final double turnFactor;
 
     private double accelerationInput;
     private double rotationAngle;
@@ -88,7 +88,7 @@ public class Car extends Vehicle {
 
         //apply drag to slow down while not accelerating (so you stop when you stop pressing gas)
         if (accelerationInput == 0){
-            rigidBody.drag = lerp(rigidBody.drag, maxDragResistance, deltaTime * maxDragResistance);
+            rigidBody.linearDrag = lerp(rigidBody.linearDrag, maxDragResistance, deltaTime * maxDragResistance);
         }
 
         Vector3 engineForce = this.transform.up().multiply(accelerationInput).multiply(accelerationFactor);
@@ -116,7 +116,7 @@ public class Car extends Vehicle {
         rotationAngle -= steeringInput * turnFactor * minSpeedBeforeAllowTurningFactor * direction;
 
         // apply steering by rotating the car object
-        rigidBody.physicsRotate(rotationAngle);
+        rigidBody.moveRotation(rotationAngle);
     }
 
     public double getAccelerationInput() {
