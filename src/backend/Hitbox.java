@@ -7,8 +7,8 @@ import java.util.Comparator;
 public class Hitbox implements GlobalUpdate{
     private final ArrayList<Vector3> vertices; //Positions of vertices on hitboxes relative to their origins.
     private final double distanceFurthestVertex; //Helps with optimization, could also just precompute this later instead of on Hitbox creation
-    private final GameObject parentObject; //The gameobject which this hitbox is attached to.
 
+    private final GameObject parentObject; //The gameobject which this hitbox is attached to.
     private final EventListenerList collisionListeners = new EventListenerList(); //A list of all collision listeners attached to this hitbox
 
     public Hitbox(ArrayList<Vector3> vertices, GameObject parentObject) {
@@ -42,6 +42,51 @@ public class Hitbox implements GlobalUpdate{
     }
 
     /**
+     * Determines this hitbox is colliding with another based on the first edge intersection found, or if a ray from the first point declares the shape
+     * is completely inside the other.
+     * @param other The other hitbox to check a collision with.
+     * @return If the hitboxes are colliding, based on a ray of the closest vertex of this hitbox.
+     */
+    public boolean intersects2D(Hitbox other) {
+        if (filterFar(this, other)) return false;
+
+        ArrayList<Vector3> thisVerts = verticesWorldSpace(this);
+        ArrayList<Vector3> thisEdges = edges(this);
+
+        ArrayList<Vector3> otherVerts = verticesWorldSpace(other);
+        ArrayList<Vector3> otherEdges = edges(other);
+
+        for(int i = 0; i < thisVerts.size(); i++) {
+            Vector3 vert1 = thisVerts.get(i);
+            Vector3 edge1 = thisEdges.get(i);
+            for(int j = 0; j < otherVerts.size(); j++) {
+                Vector3 vert2 = otherVerts.get(j);
+                Vector3 edge2 = otherEdges.get(j);
+
+
+                if(linesIntersect(vert1, edge1, vert2, edge2)) {
+                    return true;
+                    //TODO: Collision event of the hit point
+                }
+            }
+        }
+
+        Vector3 ray = new Vector3(Math.random() + 1, Math.random() + 1, 0).normalized().multiply(Integer.MAX_VALUE);
+
+        int intersections = 0;
+
+        for (int i = 0; i < otherEdges.size(); i++) {
+            if (rayIntersect(thisVerts.get(1), ray, otherVerts.get(i), otherEdges.get(i))) intersections++;
+        }
+
+        if(intersections % 2 == 1) {
+            //TODO: Collision event of vertices closest to the collision in relative space.
+            return true;
+        }
+        else return false;
+    }
+
+    /**
      * Determines if two Hitboxes are colliding based on their vertices. This function will raise an events between two colliding objects.
      *
      * @param a The first hitbox
@@ -49,6 +94,7 @@ public class Hitbox implements GlobalUpdate{
      *
      * @return If the hitboxes are colliding, based on their vertices.
      */
+    @Deprecated
     private static boolean intersects2D(Hitbox a, Hitbox b) {
         if (filterFar(a, b)) return false;
 
@@ -74,6 +120,7 @@ public class Hitbox implements GlobalUpdate{
         else return false;
     }
 
+    @Deprecated
     private static boolean intersects2DAggressive(Hitbox a, Hitbox b) {
         if (filterFar(a, b)) return false;
 
@@ -117,6 +164,7 @@ public class Hitbox implements GlobalUpdate{
         ArrayList<Vector3> newVertices = new ArrayList<>();
         for (Vector3 vert : vertices) {
             vert = vert.rotate2D(hitbox.parentObject.transform.orientation);
+            vert = vert.multiply(hitbox.parentObject.transform.size); //To make sure that the hitboxes match up with scaling up
             vert = vert.add(hitbox.parentObject.transform.position);
             newVertices.add(vert);
         }
@@ -155,7 +203,7 @@ public class Hitbox implements GlobalUpdate{
         //Time the y is equal
         double s = (slopes1.x * (point2.y - point1.y) - slopes1.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x * slopes2.y);
 
-        return s < 1 && t > 0 && s > 0;
+        return s <= 1 && t >= 0 && s >= 0;
     }
 
     /**
@@ -175,6 +223,6 @@ public class Hitbox implements GlobalUpdate{
         //Time the y is equal
         double s = (slopes1.x * (point2.y - point1.y) - slopes1.y * (point2.x - point1.x)) / (slopes2.x * slopes1.y - slopes1.x * slopes2.y);
 
-        return t < 1 && s < 1 && t > 0 && s > 0;
+        return t <= 1 && s <= 1 && t >= 0 && s >= 0;
     }
 }

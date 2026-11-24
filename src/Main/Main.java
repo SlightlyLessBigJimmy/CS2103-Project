@@ -47,8 +47,8 @@ public class Main {
 
             for(GlobalUpdate listener : listeners){
                 listener.update();
-                if (listener instanceof Sprite){
-                    sprites.add((Sprite) listener);
+                if (listener instanceof GameObject go && go.active && go.sprite != null){
+                    sprites.add(go.sprite);
                 }
             }
             renderer.renderNextFrame(sprites, camera);
