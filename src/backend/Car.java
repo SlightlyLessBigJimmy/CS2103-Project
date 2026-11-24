@@ -118,4 +118,12 @@ public class Car extends Vehicle {
         // apply steering by rotating the car object
         rigidBody.physicsRotate(rotationAngle);
     }
+
+    public double getAccelerationInput() {
+        return accelerationInput;
+    }
+
+    public double getSteeringInput() {
+        return steeringInput;
+    }
 }

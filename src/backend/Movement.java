@@ -5,9 +5,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.*;
 
 public class Movement extends JFrame implements KeyListener {
-    private int x = 0;
-    private int y = 0;
-    private boolean moving = false;
+    int x = 0;
+    int y = 0;
+    boolean moving = false;
     //TODO: Get it working with the main window, Get it working with the front end, and implement momentum and having it actually move an object, along with making sure diagonal movement works once physics are put in
     public Movement(){
        //pretty sure this stuff here is what the front end has to do, then the key pressed is our job
@@ -48,5 +48,9 @@ public class Movement extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         moving = false;
+    }
+
+    public static void main(String[] args){
+        new Movement();
     }
 }
