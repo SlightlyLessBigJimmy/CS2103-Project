@@ -9,6 +9,8 @@ public class GameObject implements GlobalUpdate{
     public Transform transform;
     public Sprite sprite;
     private String spriteId;
+    private RigidBody rb;
+    private Hitbox hitbox;
     //message from brody
     //TODO can we get a public String spriteID; that on creation gets generated a unique ID that frontend can hashmap our own collection of sprites for rendering
 

@@ -7,9 +7,9 @@ import java.util.Comparator;
 public class Hitbox implements GlobalUpdate{
     private final ArrayList<Vector3> vertices; //Positions of vertices on hitboxes relative to their origins.
     private final double distanceFurthestVertex; //Helps with optimization, could also just precompute this later instead of on Hitbox creation
-    private final GameObject parentObject;
+    private final GameObject parentObject; //The gameobject which this hitbox is attached to.
 
-    private final EventListenerList collisionListeners = new EventListenerList();
+    private final EventListenerList collisionListeners = new EventListenerList(); //A list of all collision listeners attached to this hitbox
 
     public Hitbox(ArrayList<Vector3> vertices, GameObject parentObject) {
         if (vertices.size() < 3) throw new IllegalArgumentException("Need at least 3 vertices in a hitbox.");
@@ -20,19 +20,35 @@ public class Hitbox implements GlobalUpdate{
         ).orElseThrow(() -> new IllegalStateException("Somehow there wasn't a furthest vertex!")).distance(parentObject.transform.position);
     }
 
-    protected void addCollisionListener(CollisionListener listener) {
+    /**
+     * Add a listener to this hitbox.
+     * @param listener the object whose collided function will be called upon a collision.
+     */
+    public void addCollisionListener(CollisionListener listener) {
         collisionListeners.add(CollisionListener.class, listener);
     }
 
-    protected void removeCollisionListener(CollisionListener listener) {
+    /**
+     * Removes a listener from this hitbox.
+     * @param listener the object whose collided function will be no longer be called upon a collision.
+     */
+    public void removeCollisionListener(CollisionListener listener) {
         collisionListeners.remove(CollisionListener.class, listener);
     }
 
-    protected void onCollision(CollisionEvent e) {
+    private void onCollision(CollisionEvent e) {
         CollisionListener[] listeners = collisionListeners.getListeners(CollisionListener.class);
         for (CollisionListener listener : listeners) listener.collided(e);
     }
 
+    /**
+     * Determines if two Hitboxes are colliding based on their vertices. This function will raise an events between two colliding objects.
+     *
+     * @param a The first hitbox
+     * @param b The second hitbox
+     *
+     * @return If the hitboxes are colliding, based on their vertices.
+     */
     private static boolean intersects2D(Hitbox a, Hitbox b) {
         if (filterFar(a, b)) return false;
 
@@ -51,7 +67,11 @@ public class Hitbox implements GlobalUpdate{
             if (rayIntersect(closestVertexPosition, ray, vertices.get(i), edges.get(i))) intersections++;
         }
 
-        return intersections % 2 == 1;
+        if(intersections % 2 == 1) {
+            //TODO: Return vertices closest to the collision in relative space.
+            return true;
+        }
+        else return false;
     }
 
     private static boolean intersects2DAggressive(Hitbox a, Hitbox b) {
@@ -73,12 +93,24 @@ public class Hitbox implements GlobalUpdate{
         return intersects2D(a, b);
     }
 
+    /**A point on an edge can never be farther from the origin than the farthest vertex.
+     * Return false immediately if the farthest vertices on a & b from their origins are not greater than or
+     * equal to the current distance between their origins.
+     *
+     * @param a The first hitbox
+     * @param b The second hitbox
+     *
+     * @return true if it's impossible for the two hitboxes to be colliding.
+     */
     private static boolean filterFar(Hitbox a, Hitbox b) {
-        //A point on an edge can never be farther from the origin than the farthest vertex.
-        //Return false immediately if the farthest vertices on a & b from their origins are not greater than or equal to the current distance between their origins.
         return a.distanceFurthestVertex + b.distanceFurthestVertex < a.parentObject.transform.position.distance(b.parentObject.transform.position);
     }
 
+    /**
+     * Determine where a hitbox's vertices are in world space.
+     * @param hitbox The hitbox whose vertices to map to world space
+     * @return A list of the hitbox's vertices in world space.
+     */
     private static ArrayList<Vector3> verticesWorldSpace(Hitbox hitbox) {
         @SuppressWarnings("unchecked") //What's the proper way to clone that doesn't need this suppression to not give a warning?
         ArrayList<Vector3> vertices = (ArrayList<Vector3>) hitbox.vertices.clone();
@@ -91,6 +123,11 @@ public class Hitbox implements GlobalUpdate{
         return newVertices;
     }
 
+    /**
+     * Create vectors that draw from each vertex to the next one's, as though in a circular linked list.
+     * @param hitbox The hitbox whose vertices to draw edges between
+     * @return Vectors with magnitude and direction such that they draw from the corresponding vertex to the next one in the list.
+     */
     private static ArrayList<Vector3> edges(Hitbox hitbox) {
         ArrayList<Vector3> vertices = verticesWorldSpace(hitbox);
         ArrayList<Vector3> edges = new ArrayList<>();
@@ -101,6 +138,16 @@ public class Hitbox implements GlobalUpdate{
         return edges;
     }
 
+    /**
+     * Determine if a ray intersects with a line segment
+     *
+     * @param point1 Ray's beginning
+     * @param slopes1 Ray's direction
+     * @param point2 Line segment's beginning
+     * @param slopes2 Line segment's direction and magnitude
+     *
+     * @return If the ray intersects the line segment
+     */
     private static boolean rayIntersect(Vector3 point1, Vector3 slopes1, Vector3 point2, Vector3 slopes2) {
 
         //Time the x is equal
@@ -111,6 +158,16 @@ public class Hitbox implements GlobalUpdate{
         return s < 1 && t > 0 && s > 0;
     }
 
+    /**
+     * Determine if a line segment intersects with another line segment
+     *
+     * @param point1 First line segment's beginning
+     * @param slopes1 First line segment's direction and magnitude
+     * @param point2 Second line segment's beginning
+     * @param slopes2 Second line segment's direction and magnitude
+     *
+     * @return If the first line segment intersects the second line segment
+     */
     private static boolean linesIntersect(Vector3 point1, Vector3 slopes1, Vector3 point2, Vector3 slopes2) {
 
         //Time the x is equal
