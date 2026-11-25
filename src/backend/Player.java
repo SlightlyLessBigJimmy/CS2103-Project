@@ -5,10 +5,10 @@ import java.awt.event.KeyListener;
 import java.net.http.WebSocket;
 
 public class Player extends Car implements KeyListener, GlobalUpdate {
-    boolean movingUp = false;
-    boolean movingDown = false;
-    boolean turningRight = false;
-    boolean turningLeft = false;
+    private boolean movingUp = false;
+    private boolean movingDown = false;
+    private boolean turningRight = false;
+    private boolean turningLeft = false;
     //TODO: get the key pressed connected to the panel listeners
 
     @Override
@@ -64,7 +64,6 @@ public class Player extends Car implements KeyListener, GlobalUpdate {
         double steering = currentSteer;
         double acceleration = currentAccel;
         if(movingUp){
-            System.out.println("skhjbgdgfghsaghfshjadfs");
             acceleration = lerp(currentAccel, 1, 1.0);
         }
         else if(movingDown)

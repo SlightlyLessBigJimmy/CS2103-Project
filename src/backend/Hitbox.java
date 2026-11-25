@@ -86,60 +86,6 @@ public class Hitbox implements GlobalUpdate{
         else return false;
     }
 
-    /**
-     * Determines if two Hitboxes are colliding based on their vertices. This function will raise an events between two colliding objects.
-     *
-     * @param a The first hitbox
-     * @param b The second hitbox
-     *
-     * @return If the hitboxes are colliding, based on their vertices.
-     */
-    @Deprecated
-    private static boolean intersects2D(Hitbox a, Hitbox b) {
-        if (filterFar(a, b)) return false;
-
-        Vector3 closestVertexPosition = verticesWorldSpace(b).stream().min(
-                Comparator.comparing((Vector3 vert) -> vert.distance(a.parentObject.transform.position))
-        ).orElseThrow(() -> new IllegalStateException("Hitbox b had no vertices somehow!"));
-
-        Vector3 ray = new Vector3(Math.random() + 1, Math.random() + 1, 0).normalized().multiply(Integer.MAX_VALUE);
-
-        ArrayList<Vector3> vertices = verticesWorldSpace(a);
-        ArrayList<Vector3> edges = edges(a);
-
-        int intersections = 0;
-
-        for (int i = 0; i < edges.size(); i++) {
-            if (rayIntersect(closestVertexPosition, ray, vertices.get(i), edges.get(i))) intersections++;
-        }
-
-        if(intersections % 2 == 1) {
-            //TODO: Return vertices closest to the collision in relative space.
-            return true;
-        }
-        else return false;
-    }
-
-    @Deprecated
-    private static boolean intersects2DAggressive(Hitbox a, Hitbox b) {
-        if (filterFar(a, b)) return false;
-
-        ArrayList<Vector3> aVertices = verticesWorldSpace(a);
-        ArrayList<Vector3> aEdges = edges(a);
-        ArrayList<Vector3> bVertices = verticesWorldSpace(b);
-        ArrayList<Vector3> bEdges = verticesWorldSpace(b);
-
-        for (int i = 0; i < aEdges.size(); i++) {
-            Vector3 vertexA = aVertices.get(i);
-            Vector3 edgeA = aEdges.get(i);
-            for (int j = 0; j < bEdges.size(); j++) {
-                if (linesIntersect(vertexA, edgeA, bVertices.get(j), bEdges.get(j))) return true;
-            }
-        }
-
-        return intersects2D(a, b);
-    }
-
     /**A point on an edge can never be farther from the origin than the farthest vertex.
      * Return false immediately if the farthest vertices on a & b from their origins are not greater than or
      * equal to the current distance between their origins.
