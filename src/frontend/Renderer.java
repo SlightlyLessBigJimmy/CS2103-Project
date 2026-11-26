@@ -112,6 +112,7 @@ public class Renderer extends JFrame {
         g.scale(drawW / imgW, drawH / imgH);
         //4. draw with the image's centre on the origin (not its top-left corner)
         g.drawImage(img, -imgW / 2, -imgH / 2, null);
+
     }
 
     //calculates where obj is drawn on screen based off of relative position to the camera and adjusted to game scale via game units

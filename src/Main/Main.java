@@ -25,7 +25,7 @@ public class Main {
         updateListeners.remove(GlobalUpdate.class, listener);
     }
 
-    public static void main(){
+    public static void main() {
 
         Renderer renderer = new Renderer(900,600);
         renderer.setVisible(true);
@@ -34,7 +34,7 @@ public class Main {
         try {
             GameObject testObj = (GameObject) CustomMath.instantiate(new Player());
             testObj.transform.size = new Vector3(0.1, 0.1,1);
-            Sprite testSprite = (Sprite) CustomMath.instantiate(new Sprite("images/car1.png", testObj));
+            Sprite testSprite = (Sprite) CustomMath.instantiate(new Sprite("images/Car_Green.png", testObj, 0, 30));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
