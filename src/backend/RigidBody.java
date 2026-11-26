@@ -1,13 +1,13 @@
 package backend;
 
 public class RigidBody implements GlobalUpdate{
-    protected final GameObject gameObject;
-    protected Vector3 linearVelocity;
-    protected double angularVelocity;
-    protected Vector3 centerOfMass;
+    private final GameObject gameObject;
+    private Vector3 linearVelocity;
+    private double angularVelocity;
+    private Vector3 centerOfMass;
 
-    protected double linearDrag = 0;
-    protected double angularDrag = 0;
+    private double linearDrag = 0;
+    private double angularDrag = 0;
 
     private double inverseMass = 1;
     private double inverseInertia = 1;
@@ -30,6 +30,9 @@ public class RigidBody implements GlobalUpdate{
         updateAngular();
     }
 
+    /**
+     * Updates linear-related physics of this RigidBody.
+     */
     private void updateLinear(){
         Vector3 acceleration = forceAccumulator.multiply(inverseMass);
 
@@ -39,12 +42,15 @@ public class RigidBody implements GlobalUpdate{
 
         gameObject.transform.position = gameObject.transform.position.add(linearVelocity.multiply(Timing.deltaTime()));
 
-        forceAccumulator = new Vector3();
+        forceAccumulator = new Vector3(); //TODO: This method makes instantaneous forces less impactful at higher frame rates.
     }
 
+    /**
+     * Updates the angular-related physics of this RigidBody.
+     */
     private void updateAngular(){
 
-        // for moveRotation
+        // If the angle for the object was marked this frame, set it to that. Otherwise, proceed with angular physics.
         if (!Double.isNaN(rotationTarget)) {
             gameObject.transform.orientation = rotationTarget;
             angularVelocity = 0;
@@ -58,7 +64,7 @@ public class RigidBody implements GlobalUpdate{
 
         gameObject.transform.orientation = ((gameObject.transform.orientation + angularVelocity * Timing.deltaTime()) % 360 + 360) % 360;//wrap around to 0-360
 
-        torqueAccumulator = 0;
+        torqueAccumulator = 0; //TODO: This method makes instantaneous forces less impactful at higher frame rates.
     }
 
     public void setMass(double mass) {
@@ -84,16 +90,15 @@ public class RigidBody implements GlobalUpdate{
         return 1.0 / inverseMass;
     }
 
-
-    public void addForce(Vector3 force){
+    public void addForce(Vector3 force) {
         forceAccumulator = forceAccumulator.add(force);
     }
 
-    public void addImpulse(Vector3 impulse){
+    public void addImpulse(Vector3 impulse) {
         linearVelocity = linearVelocity.add(impulse.multiply(inverseMass));
     }
 
-    public void addTorque(double torque){
+    public void addTorque(double torque) {
         torqueAccumulator += torque;
     }
 
@@ -101,7 +106,11 @@ public class RigidBody implements GlobalUpdate{
         angularVelocity += impulse * inverseInertia;
     }
 
-    public void moveRotation(double orientation){
+    /**
+     * Directly set the angle of the object in the next frame.
+     * @param orientation
+     */
+    public void setAngle(double orientation) {
         rotationTarget = ((orientation % 360) + 360) % 360;
     }
 }

@@ -2,7 +2,6 @@ package backend;
 
 public class Timing{
 
-
     private static long lastFrameTime = System.nanoTime();
 
     private static float deltaTime; // change in time between rendered frames, in seconds

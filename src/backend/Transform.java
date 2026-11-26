@@ -23,6 +23,10 @@ public class Transform {
         this.orientation = other.orientation;
     }
 
+    /**
+     * Creates a unit vector Vector3 pointing forward from this transform.
+     * @return a unit vector pointing forward.
+     */
     public Vector3 up(){
         double rad = Math.toRadians(orientation);
         double x = -Math.sin(rad);
@@ -30,11 +34,14 @@ public class Transform {
         return new Vector3(x,y,0);
     }
 
+    /**
+     * Creates a unit vector Vector3 pointing right from this transform.
+     * @return a unit vector pointing right.
+     */
     public Vector3 right(){
         double rad = Math.toRadians(orientation);
         double x = Math.cos(rad);
         double y = Math.sin(rad);
         return new Vector3(x,y,0);
     }
-
 }

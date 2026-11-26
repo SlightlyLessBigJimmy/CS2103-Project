@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.http.WebSocket;
 
+import static backend.CustomMath.lerp;
+
 public class Player extends Car implements KeyListener, GlobalUpdate {
     private boolean movingUp = false;
     private boolean movingDown = false;
@@ -54,6 +56,14 @@ public class Player extends Car implements KeyListener, GlobalUpdate {
             if(turningRight)
                 turningRight = false;
         }
+    }
+
+    public double getAccelerationInput() {
+        return accelerationInput;
+    }
+
+    public double getSteeringInput() {
+        return steeringInput;
     }
 
     @Override

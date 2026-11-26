@@ -1,6 +1,9 @@
 package backend;
 
 public class Car extends Vehicle {
+
+    //TODO: What actually needs to be in this class, and what can we move to the Vehicle class?
+
     //this class is mostly for the player movement, but could be used for NPC cars as well if that's how we want to do things
 
     //region car specifications
@@ -10,10 +13,10 @@ public class Car extends Vehicle {
     private final double maxReverseSpeed;
     private final double maxSpeed;
     private final double turnFactor;
-
-    private double accelerationInput;
     private double rotationAngle;
-    private double steeringInput;
+
+    protected double accelerationInput;
+    protected double steeringInput;
 
     private RigidBody rigidBody = new RigidBody(this);
 
@@ -55,17 +58,11 @@ public class Car extends Vehicle {
         this.accelerationInput = acceleration;
         this.steeringInput = steering;
     }
-
+    /* TODO: Rather than directly modifying transform, use the physics we added to RigidBody.java. Follows encapsulation better.
     public void update(double deltaTime){
         applyEngineForce(deltaTime);
         applySteering();
     }
-
-
-    //ToDo figure out where to put Lerp
-    double lerp(double start, double end, double t){
-        return start + (end - start) * t;
-    } //Why did we define this here and in CustomMath.java? -Ryan
 
     void applyEngineForce(double deltaTime){
 
@@ -118,12 +115,5 @@ public class Car extends Vehicle {
         // apply steering by rotating the car object
         rigidBody.moveRotation(rotationAngle);
     }
-
-    public double getAccelerationInput() {
-        return accelerationInput;
-    }
-
-    public double getSteeringInput() {
-        return steeringInput;
-    }
+         */
 }

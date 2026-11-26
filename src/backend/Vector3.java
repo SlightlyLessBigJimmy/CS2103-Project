@@ -67,6 +67,11 @@ public class Vector3{
 
     public double distance(Vector3 other) {return line(other).magnitude();}
 
+    /**
+     * Create a line to another point, originating from this Vector3. Assumes both Vector3s are points.
+     * @param other the point to draw a line to
+     * @return a Vector3 with magnitude and direction that represents a line from the position of the caller to the other Vector3 position.
+     */
     public Vector3 line(Vector3 other) {return new Vector3(other.x-this.x, other.y-this.y, other.z-this.z);}
 
     public Vector3 normalized() {
@@ -74,6 +79,11 @@ public class Vector3{
         return new Vector3(this.x / magnitude, this.y / magnitude, this.z / magnitude);
     }
 
+    /**
+     * Rotates a Vector3 around (0,0) on the (x,y) plane.
+     * @param orientation The angle, in degrees, to rotate by.
+     * @return A new Vector3 which represents the caller rotated.
+     */
     public Vector3 rotate2D(double orientation) {
         double radians = Math.toRadians(orientation);
         return new Vector3(
