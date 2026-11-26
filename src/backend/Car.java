@@ -19,7 +19,7 @@ public class Car extends Vehicle {
     protected double steeringInput;
 
     private RigidBody rigidBody = new RigidBody(this);
-
+    private Hitbox hitbox;
     //endregion
 
     //region Constructors
@@ -37,7 +37,8 @@ public class Car extends Vehicle {
         rotationAngle = 0;
     }
 
-    public Car(double turnFactor, double accelerationFactor, double driftFactor, double maxSpeed, double maxReverseSpeed, double maxDragResistance,
+    public Car(double turnFactor, double accelerationFactor, double driftFactor, double maxSpeed,
+               double maxReverseSpeed, double maxDragResistance,
                double accelerationInput, double steeringInput, double rotationAngle) {
         //TODO: Improve this because it's horrible to use
         this.turnFactor = turnFactor;
@@ -58,40 +59,21 @@ public class Car extends Vehicle {
         this.accelerationInput = acceleration;
         this.steeringInput = steering;
     }
-    /* TODO: Rather than directly modifying transform, use the physics we added to RigidBody.java. Follows encapsulation better.
+
     public void update(double deltaTime){
         applyEngineForce(deltaTime);
         applySteering();
     }
 
     void applyEngineForce(double deltaTime){
+        //adjust the drag that slows down the car as it changes
+        rigidBody.linearDrag = CustomMath.lerp(rigidBody.linearDrag, maxDragResistance, deltaTime * maxDragResistance);
 
-        double velocityVsUp = this.transform.up().dot(rigidBody.linearVelocity);
-
-        //Limit speed forward
-        if (velocityVsUp > maxSpeed && accelerationInput > 0){
-            return;
-        }
-
-        //limit speed reverse
-        if (velocityVsUp < maxReverseSpeed  && accelerationInput < 0){
-            return;
-        }
-
-        //limit to max speed while accelerating
-        if (Math.pow(rigidBody.linearVelocity.magnitude(), 2) > Math.pow(maxSpeed, 2) && accelerationInput > 0){
-            return;
-        }
-
-        //apply drag to slow down while not accelerating (so you stop when you stop pressing gas)
-        if (accelerationInput == 0){
-            rigidBody.linearDrag = lerp(rigidBody.linearDrag, maxDragResistance, deltaTime * maxDragResistance);
-        }
+        if(speedConstraints()) return;
 
         Vector3 engineForce = this.transform.up().multiply(accelerationInput).multiply(accelerationFactor);
         rigidBody.addForce(engineForce);
     }
-
 
     void applySteering()
     {
@@ -107,13 +89,20 @@ public class Car extends Vehicle {
         minSpeedBeforeAllowTurningFactor = Math.clamp(minSpeedBeforeAllowTurningFactor, 0, 1);
 
         // invert steering while reversing
-        double direction = rigidBody.linearVelocity.dot(this.transform.up()) >= 0 ? 1 : -1;
+        int direction = rigidBody.linearVelocity.dot(this.transform.up()) >= 0 ? 1 : -1;
 
         // update the rotation angle based on input
         rotationAngle -= steeringInput * turnFactor * minSpeedBeforeAllowTurningFactor * direction;
 
         // apply steering by rotating the car object
-        rigidBody.moveRotation(rotationAngle);
+        rigidBody.setAngle(rotationAngle);
     }
-         */
+
+    private boolean speedConstraints() {
+        double velocityForwards = this.transform.up().dot(rigidBody.linearVelocity);
+        //limit speed reverse
+        if (velocityForwards < maxReverseSpeed  && accelerationInput < 0) return true;
+        //limit to max speed while accelerating
+        return rigidBody.linearVelocity.magnitude() > maxSpeed && accelerationInput > 0;
+    }
 }

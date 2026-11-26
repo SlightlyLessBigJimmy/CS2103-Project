@@ -2,12 +2,12 @@ package backend;
 
 public class RigidBody implements GlobalUpdate{
     private final GameObject gameObject;
-    private Vector3 linearVelocity;
-    private double angularVelocity;
     private Vector3 centerOfMass;
 
-    private double linearDrag = 0;
-    private double angularDrag = 0;
+    protected double angularVelocity;
+    protected Vector3 linearVelocity;
+    protected double linearDrag = 0;
+    protected double angularDrag = 0;
 
     private double inverseMass = 1;
     private double inverseInertia = 1;
