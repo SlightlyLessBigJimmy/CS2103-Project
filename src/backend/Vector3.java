@@ -93,6 +93,15 @@ public class Vector3{
                 );
     }
 
+    public Vector3 unrotate2D(double orientation) {
+        double radians = Math.toRadians(orientation);
+        return new Vector3(
+                this.x * Math.cos(radians) + this.y * Math.sin(radians),
+                this.x * Math.sin(radians) * -1 + this.y * Math.cos(radians),
+                this.z
+        );
+    }
+
     @Override
     public String toString(){
         return "(" + x + ", " + y + ", " + z + ")";
